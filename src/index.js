@@ -3,14 +3,14 @@ const app = express()
 app.use(express.json());
 const studentArray = require('./InitialData.js');
 
-//const bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 const port = 8080;
-//app.use(express.urlencoded());
+app.use(express.urlencoded());
 
 // Parse JSON bodies (as sent by API clients)
 
-//app.use(bodyParser.urlencoded({ extended: false }))
-//app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 // your code goes here
 
 
@@ -25,6 +25,14 @@ app.get('/api/student/:id', (req, res) => {
         res.send(studentArray[req.params.id - 1]);
     }
 })
+app.delete('/api/student/:id',(req,res)=>{
+    if(req.params.id<=studentArray.length && req.params.id>0){
+        delete studentArray[req.params.id];
+        res.sendStatus(200);
+    }else{
+        res.sendStatus(404);
+    }
+});
 app.post('/api/student', (req, res) => {
     res.set({ 'content-type': 'application/x-www-form-urlencoded' });
     if (typeof req.body.name !== 'string'
@@ -44,11 +52,6 @@ app.post('/api/student', (req, res) => {
         });
         res.send({"id":id});
     }
-
-
-    
-    res.send(studentArray);
-    console.log(studentArray);
 });
 app.listen(port, () => console.log(`App listening on port ${port}!`))
 
