@@ -26,7 +26,7 @@ app.get('/api/student/:id', (req, res) => {
     }
 })
 app.delete('/api/student/:id',(req,res)=>{
-    if(req.params.id<=studentArray.length && req.params.id>0){
+    if(typeof req.params.id!=='number' && req.params.id<=studentArray.length && req.params.id>0){
         delete studentArray[req.params.id];
         res.sendStatus(200);
     }else{
@@ -38,7 +38,7 @@ app.post('/api/student', (req, res) => {
     if (typeof req.body.name !== 'string'
         || typeof req.body.currentClass !== 'number'
         || typeof req.body.division !== 'string') {
-            res.send(400);
+            res.sendStatus(400);
     } else {
         const id = studentArray.length + 1;
         const name = req.body.name;
@@ -51,6 +51,16 @@ app.post('/api/student', (req, res) => {
             "division": division
         });
         res.send({"id":id});
+    }
+});
+app.put('/api/student/:id',(req,res)=>{
+    res.set({ 'content-type': 'application/x-www-form-urlencoded' });
+    if(typeof Number(req.params.id)==='number' && req.params.id<=studentArray.length && req.params.id>0){
+        const name=req.body.name;
+        studentArray[req.params.id].name=name;
+        res.sendStatus(200);
+    }else{
+        res.sendStatus(400);
     }
 });
 app.listen(port, () => console.log(`App listening on port ${port}!`))
