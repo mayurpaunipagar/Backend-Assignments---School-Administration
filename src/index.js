@@ -34,7 +34,7 @@ app.delete('/api/student/:id',(req,res)=>{
     }
 });
 app.post('/api/student', (req, res) => {
-    res.set({ 'content-type': 'application/x-www-form-urlencoded' });
+    res.set( 'content-type', 'application/x-www-form-urlencoded' );
     if (typeof req.body.name !== 'string'
         || typeof req.body.currentClass !== 'number'
         || typeof req.body.division !== 'string') {
@@ -54,7 +54,7 @@ app.post('/api/student', (req, res) => {
     }
 });
 app.put('/api/student/:id',(req,res)=>{
-    res.set({ 'content-type': 'application/x-www-form-urlencoded' });
+    res.set( 'content-type', 'application/x-www-form-urlencoded' );
     if(typeof Number(req.params.id)==='number' && req.params.id<=studentArray.length && req.params.id>0){
         const name=req.body.name;
         studentArray[req.params.id].name=name;
