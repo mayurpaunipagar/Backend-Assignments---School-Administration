@@ -17,63 +17,63 @@ app.use(bodyParser.json())
 app.get('/api/student', (req, res) => {
     res.send(studentArray);
 });
-// app.get('/api/student/:id', (req, res) => {
-//     if(typeof studentArray[req.params.id-1]==="undefined"){
-//         res.sendStatus(404);
-//     }else{
-//         console.log({name:'mayur',age:26});
-//         // res.send(object);
-//     }
+app.get('/api/student/:id', (req, res) => {
+    const object=studentArray[req.params.id-1];
+    if(typeof object==="undefined"){
+        res.sendStatus(404);
+    }else{
+        res.send(object);
+    }
     
-// })
-// app.delete('/api/student/:id',(req,res)=>{
-//     const object=studentArray[req.params.id-1];
-//     if(typeof object==="undefined"){
-//         res.sendStatus(404);
-//     }else{
-//         delete studentArray[req.params.id-1];
-//         res.sendStatus(200);
-//     }
-// });
-// app.post('/api/student', (req, res) => {
-//     res.set( 'content-type', 'application/x-www-form-urlencoded' );
-//     if (req.body.name && req.body.currentClass && req.body.division) {
-//         const id=studentArray.length+1;
-//         const name = req.body.name;
-//         const currentClass = req.body.currentClass;
-//         const division = req.body.division;
-//         studentArray.push({
-//             "id": id,
-//             "name": name,
-//             "currentClass": currentClass,
-//             "division": division
-//         });
-//         res.send({"id":id});
-//     } else {
-//         res.sendStatus(400);
+})
+app.delete('/api/student/:id',(req,res)=>{
+    const object=studentArray[req.params.id-1];
+    if(typeof object==="undefined"){
+        res.sendStatus(404);
+    }else{
+        delete studentArray[req.params.id-1];
+        res.sendStatus(200);
+    }
+});
+app.post('/api/student', (req, res) => {
+    res.set( 'content-type', 'application/x-www-form-urlencoded' );
+    if (req.body.name && req.body.currentClass && req.body.division) {
+        const id=studentArray.length+1;
+        const name = req.body.name;
+        const currentClass = req.body.currentClass;
+        const division = req.body.division;
+        studentArray.push({
+            "id": id,
+            "name": name,
+            "currentClass": currentClass,
+            "division": division
+        });
+        res.send({"id":id});
+    } else {
+        res.sendStatus(400);
         
-//     }
-// });
-// app.put('/api/student/:id',(req,res)=>{
-//     res.set( 'content-type', 'application/x-www-form-urlencoded' );
-//     const object=studentArray[req.params.id-1];
-//     if(typeof object==="undefined"){
-//         res.sendStatus(400);
-//     }else{
-//         if(req.body.name){
-//             object.name=req.body.name;
-//             res.sendStatus(200);
-//         }else if(req.body.currentClass){
-//             object.currentClass=req.body.currentClass;
-//             res.sendStatus(200);
-//         }else if(req.body.division){
-//             object.division=req.body.division;
-//             res.sendStatus(200);
-//         }else{
-//             res.sendStatus(400);
-//         }
-//     }
-// });
+    }
+});
+app.put('/api/student/:id',(req,res)=>{
+    res.set( 'content-type', 'application/x-www-form-urlencoded' );
+    const object=studentArray[req.params.id-1];
+    if(typeof object==="undefined"){
+        res.sendStatus(400);
+    }else{
+        if(req.body.name){
+            object.name=req.body.name;
+            res.sendStatus(200);
+        }else if(req.body.currentClass){
+            object.currentClass=req.body.currentClass;
+            res.sendStatus(200);
+        }else if(req.body.division){
+            object.division=req.body.division;
+            res.sendStatus(200);
+        }else{
+            res.sendStatus(400);
+        }
+    }
+});
 app.listen(port, () => console.log(`App listening on port ${port}!`))
 
 module.exports = app;   
