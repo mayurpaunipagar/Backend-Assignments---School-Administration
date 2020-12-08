@@ -2,7 +2,6 @@ const express = require('express')
 const app = express()
 app.use(express.json());
 const studentArray = require('./InitialData.js');
-let idCount=studentArray.length;
 const bodyParser = require("body-parser");
 const port = 8080;
 app.use(express.urlencoded());
@@ -19,27 +18,27 @@ app.get('/api/student', (req, res) => {
     res.send(studentArray);
 });
 app.get('/api/student/:id', (req, res) => {
-    if (req.params.id > studentArray.length || req.params.id < 0) {
+    const object=studentArray[req.params.id-1];
+    if(typeof object==="undefined"){
         res.sendStatus(404);
-    } else {
-        res.send(studentArray[req.params.id - 1]);
+    }else{
+        res.send(object);
     }
+    
 })
-// app.delete('/api/student/:id',(req,res)=>{
-//     if(typeof req.params.id!=='number' && req.params.id<=studentArray.length && req.params.id>0){
-//         studentArray.splice(req.params.id-1,1);
-//         console.log(studentArray);
-//         res.sendStatus(200);
-//     }else{
-//         console.log(studentArray);
-//         res.sendStatus(404);
-//     }
-// });
+app.delete('/api/student/:id',(req,res)=>{
+    const object=studentArray[req.params.id-1];
+    if(typeof object==="undefined"){
+        res.sendStatus(404);
+    }else{
+        delete studentArray[req.params.id-1];
+        res.sendStatus(200);
+    }
+});
 app.post('/api/student', (req, res) => {
     res.set( 'content-type', 'application/x-www-form-urlencoded' );
     if (req.body.name && req.body.currentClass && req.body.division) {
-        idCount++;
-        const id = idCount;
+        const id=studentArray.length+1;
         const name = req.body.name;
         const currentClass = req.body.currentClass;
         const division = req.body.division;
@@ -55,16 +54,26 @@ app.post('/api/student', (req, res) => {
         
     }
 });
-// app.put('/api/student/:id',(req,res)=>{
-//     res.set( 'content-type', 'application/x-www-form-urlencoded' );
-//     if(typeof Number(req.params.id)==='number' && req.params.id<=studentArray.length && req.params.id>0){
-//         const name=req.body.name;
-//         studentArray[req.params.id].name=name;
-//         res.sendStatus(200);
-//     }else{
-//         res.sendStatus(400);
-//     }
-// });
+app.put('/api/student/:id',(req,res)=>{
+    res.set( 'content-type', 'application/x-www-form-urlencoded' );
+    const object=studentArray[req.params.id-1];
+    if(typeof object==="undefined"){
+        res.sendStatus(400);
+    }else{
+        if(req.body.name){
+            object.name=req.body.name;
+            res.sendStatus(200);
+        }else if(req.body.currentClass){
+            object.currentClass=req.body.currentClass;
+            res.sendStatus(200);
+        }else if(req.body.division){
+            object.division=req.body.division;
+            res.sendStatus(200);
+        }else{
+            res.sendStatus(400);
+        }
+    }
+});
 app.listen(port, () => console.log(`App listening on port ${port}!`))
 
 module.exports = app;   
