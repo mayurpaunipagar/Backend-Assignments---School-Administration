@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 app.use(express.json());
 const studentArray = require('./InitialData.js');
-
+let idCount=studentArray.length;
 const bodyParser = require("body-parser");
 const port = 8080;
 app.use(express.urlencoded());
@@ -25,22 +25,21 @@ app.get('/api/student/:id', (req, res) => {
         res.send(studentArray[req.params.id - 1]);
     }
 })
-app.delete('/api/student/:id',(req,res)=>{
-    if(typeof req.params.id!=='number' && req.params.id<=studentArray.length && req.params.id>0){
-        delete studentArray[req.params.id];
-        res.sendStatus(200);
-    }else{
-        res.sendStatus(404);
-    }
-});
+// app.delete('/api/student/:id',(req,res)=>{
+//     if(typeof req.params.id!=='number' && req.params.id<=studentArray.length && req.params.id>0){
+//         studentArray.splice(req.params.id-1,1);
+//         console.log(studentArray);
+//         res.sendStatus(200);
+//     }else{
+//         console.log(studentArray);
+//         res.sendStatus(404);
+//     }
+// });
 app.post('/api/student', (req, res) => {
     res.set( 'content-type', 'application/x-www-form-urlencoded' );
-    if (typeof req.body.name !== 'string'
-        || typeof req.body.currentClass !== 'number'
-        || typeof req.body.division !== 'string') {
-            res.sendStatus(400);
-    } else {
-        const id = studentArray.length + 1;
+    if (req.body.name && req.body.currentClass && req.body.division) {
+        idCount++;
+        const id = idCount;
         const name = req.body.name;
         const currentClass = req.body.currentClass;
         const division = req.body.division;
@@ -51,18 +50,21 @@ app.post('/api/student', (req, res) => {
             "division": division
         });
         res.send({"id":id});
-    }
-});
-app.put('/api/student/:id',(req,res)=>{
-    res.set( 'content-type', 'application/x-www-form-urlencoded' );
-    if(typeof Number(req.params.id)==='number' && req.params.id<=studentArray.length && req.params.id>0){
-        const name=req.body.name;
-        studentArray[req.params.id].name=name;
-        res.sendStatus(200);
-    }else{
+    } else {
         res.sendStatus(400);
+        
     }
 });
+// app.put('/api/student/:id',(req,res)=>{
+//     res.set( 'content-type', 'application/x-www-form-urlencoded' );
+//     if(typeof Number(req.params.id)==='number' && req.params.id<=studentArray.length && req.params.id>0){
+//         const name=req.body.name;
+//         studentArray[req.params.id].name=name;
+//         res.sendStatus(200);
+//     }else{
+//         res.sendStatus(400);
+//     }
+// });
 app.listen(port, () => console.log(`App listening on port ${port}!`))
 
 module.exports = app;   
