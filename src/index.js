@@ -53,9 +53,12 @@ app.post('/api/student', (req, res) => {
         
     }
 });
+const nullOrUndefined=(variable)=>{
+    return (variable === null || variable === undefined)?true:false;
+}
 app.put('/api/student/:id',(req,res)=>{
     const object=studentArray[req.params.id-1];
-    if(typeof object==="undefined"){
+    if(nullOrUndefined(object)){
         res.sendStatus(400);
     }else{
         if(req.body.name){
