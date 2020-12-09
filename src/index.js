@@ -36,11 +36,10 @@ app.delete('/api/student/:id',(req,res)=>{
     }
 });
 app.post('/api/student', (req, res) => {
-    res.set( 'content-type', 'application/x-www-form-urlencoded' );
     if (req.body.name && req.body.currentClass && req.body.division) {
         const id=studentArray.length+1;
         const name = req.body.name;
-        const currentClass = req.body.currentClass;
+        const currentClass = Number(req.body.currentClass);
         const division = req.body.division;
         studentArray.push({
             "id": id,
@@ -55,7 +54,6 @@ app.post('/api/student', (req, res) => {
     }
 });
 app.put('/api/student/:id',(req,res)=>{
-    res.set( 'content-type', 'application/x-www-form-urlencoded' );
     const object=studentArray[req.params.id-1];
     if(typeof object==="undefined"){
         res.sendStatus(400);
@@ -64,7 +62,7 @@ app.put('/api/student/:id',(req,res)=>{
             object.name=req.body.name;
             res.sendStatus(200);
         }else if(req.body.currentClass){
-            object.currentClass=req.body.currentClass;
+            object.currentClass=Number(req.body.currentClass);
             res.sendStatus(200);
         }else if(req.body.division){
             object.division=req.body.division;
