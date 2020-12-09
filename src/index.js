@@ -61,14 +61,16 @@ app.put('/api/student/:id',(req,res)=>{
     if(nullOrUndefined(object)){
         res.sendStatus(400);
     }else{
-        if(req.body.name){
-            object.name=req.body.name;
-            res.sendStatus(200);
-        }else if(req.body.currentClass){
-            object.currentClass=Number(req.body.currentClass);
-            res.sendStatus(200);
-        }else if(req.body.division){
-            object.division=req.body.division;
+        if(req.body.name || req.body.currentClass || req.body.division){
+            if(req.body.name){
+                object.name=req.body.name;   
+            }
+            if(req.body.currentClass){
+                object.currentClass=Number(req.body.currentClass);
+            }
+            if(req.body.division){
+                object.division=req.body.division;
+            }
             res.sendStatus(200);
         }else{
             res.sendStatus(400);
